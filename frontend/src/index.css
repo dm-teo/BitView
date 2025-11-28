@@ -1,0 +1,216 @@
+/* src/index.css */
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  
+  /* THE "DIGITAL GOLD" PALETTE */
+  --primary: #f7931a;        /* The Official Bitcoin Orange/Gold */
+  --primary-hover: #d67c10;  /* A deeper, richer gold for hovering */
+
+  --text-main: #f9fafb;      /* Almost pure white for readability */
+  --text-muted: #9ca3af;     /* Cool grey for subtitles */
+
+  --bg-white: #0f172a;       /* Deep, rich midnight blue (Dark Mode base) */
+  --element-bg: #1e293b;     /* Lighter blue-grey for the search bar */
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--bg-white);
+  color: var(--text-main);
+  min-height: 100vh;
+}
+
+/* Layout Utilities */
+.app-container {
+  max-width: 100%;   /* Remove the 1200px limit */
+  margin: 0 auto;         /* Remove centering margins */
+  padding: 0 20px;        /* Reset padding */
+}
+
+/* --- NAVBAR --- */
+.navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0;
+}
+
+.logo {
+  font-weight: 800;
+  font-size: 1.5rem;
+  letter-spacing: -0.5px;
+  color: var(--primary);
+  cursor: pointer;
+}
+
+.nav-links {
+  display: flex;
+  gap: 15px;
+}
+
+/* --- HERO SECTION --- */
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 60px;
+
+  /* Now we apply the constraints ONLY to the hero content */
+  max-width: 1200px;
+  margin: 0 auto;    /* This centers the Hero in the middle of the page */
+  padding: 0 20px;   /* Prevents text from hitting the edge on small screens */
+
+  /* This forces the Hero to take up vertical space, centering it visually on screen */
+  min-height: 70vh;
+}
+
+/* Ensure the two columns share space nicely */
+.hero-content {
+  text-align: center;
+  align-items: center;
+}
+
+.hero-image {
+  flex; 1;
+  display: flex;
+  justify-content: center;
+}
+
+
+.hero-title {
+  font-size: 4rem; /* Big title */
+  line-height: 1.1;
+  margin-bottom: 20px;
+  font-weight: 900;
+  letter-spacing: -1px;
+}
+
+.highlight {
+  color: var(--primary); /* Makes "For Everyone" blue */
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  color: var(--text-muted);
+  margin-bottom: 40px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* --- SEARCH BAR --- */
+.search-container {
+  display: flex;
+  background-color: var(--element-bg);
+  border: 1px solid #334155;
+  padding: 8px;
+  border-radius: 50px; /* Fully rounded pills */
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.5);
+  max-width: 500px;
+  margin: 0;
+}
+
+.search-input {
+  flex-grow: 1;
+  background: transparent;
+  color: var(--text-main);
+  border: none;
+  outline: none;
+  padding: 12px 20px;
+  font-size: 1rem;
+}
+
+.search-btn {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 12px 30px;
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.search-btn:hover {
+  background-color: var(--primary-hover);
+}
+
+/* Buttons */
+.btn-text {
+  background: none;
+  border: none;
+  font-weight: 600;
+  color: var(--text-main);
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.btn-primary {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.btn-primary:hover {
+  background-color: var(--primary-hover);
+}
+
+
+.crypto-card {
+  background: linear-gradient(145deg, #1e293b, #0f172a); /* Cool 3D dark gradient */
+  border: 1px solid rgba(247, 147, 26, 0.2); /* Subtle Gold Border */
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7); /* Deep shadow */
+  width: 300px; /* Fixed width so it looks like a phone card */
+  color: white;
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #94a3b8;
+}
+
+.card-price {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 5px;
+}
+
+.card-change {
+  color: #10b981; /* Profit Green */
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+
+@media (max-width: 768px) {
+  .hero {
+    flex-direction: column; /* Stack them vertical */
+    text-align: center;     /* Center text */
+    gap: 40px;
+    margin-top: 40px;
+  }
+
+  .hero-subtitle {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .search-container {
+    margin: 0 auto; /* Keep search bar centered */
+  }
+}
