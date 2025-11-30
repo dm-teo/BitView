@@ -5,19 +5,37 @@ function App() {
   const [searchQuery, setSearchQuery] = useState('')
 
   const handleSearch = () => {
-    console.log("Searching for:", searchQuery)
+    // pass the text from the search bar (searchQuery) into our fetcher
+    fetchData(searchQuery)
   }
 
   // 1. The Bucket: Holds the data from Python. Starts as null (empty).
   const [cryptoData, setCryptoData] = useState(null)
 
-  // 2. The Fetcher: Asks Python for the data.
-  useEffect(() => {
-        fetch('http://127.0.0.1:5001/api/crypto')
-        .then(response => response.json())
-        .then(data => setCryptoData(data))
-        .catch(error => console.error('Error:', error))
-  }, [])
+    // 1. Define the reusable function
+    // Notice we added '(coin)' so it can accept ANY coin name  const fetchData = async (coin) => {
+    const fetchData = async (coin) => {
+      try {
+          // we use the variable ${coin} in the url
+          const response = await fetch(`http://127.0.0.1:5001/api/crypto?coin=${coin}`);
+          const data = await response.json();
+
+          //if there are any errors (like coin not found), don't break the app
+          if (data.error) {
+              console.error("Coin not found");
+              return;
+          }
+          setCryptoData(data);
+      } catch (error) {
+          console.error("Error fetching data:", error);
+      }
+
+    };
+
+    // 2. Call it automatically when the page loads (Default to bitcoin)
+    useEffect(() => {
+        fetchData('bitcoin');   // this starts the code from above, like a start button
+    }, []);
 
   return (
     <div className="app-container">
@@ -69,9 +87,9 @@ function App() {
                 <span className="card-title">{cryptoData.name}</span>
                 <span className="card-ticker">{cryptoData.symbol}</span>
               </div>
-              <div className="card-price">${cryptoData.price}</div>
-              <div className="card-change">
-                  {cryptoData.change}%
+              <div className="card-price">${cryptoData.price.toLocaleString()}</div>
+              <div className="card-change" style={{ color: cryptoData.change >= 0 ? '#10b981' : '#ef4444' }}>
+                  {cryptoData.change > 0 ? '+' : ''}{cryptoData.change}%
                   <span style={{ fontSize: '0.8rem', color: '#64748b', marginLeft: '5px' }}>
                     (24h)
                   </span>
