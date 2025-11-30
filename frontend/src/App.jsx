@@ -1,6 +1,13 @@
 import { useState, useEffect } from 'react'
 
 function App() {
+  const [activeCoin, setActiveCoin] = useState({
+    name: 'Bitcoin',
+    symbol: 'BTC',
+    price: 96420.00,
+    change: 5.24
+  });
+
   // Logic for the search bar
   const [searchQuery, setSearchQuery] = useState('')
 
@@ -9,8 +16,8 @@ function App() {
     fetchData(searchQuery)
   }
 
-  // 1. The Bucket: Holds the data from Python. Starts as null (empty).
-  const [cryptoData, setCryptoData] = useState(null)
+// Initialize with an empty list [] instead of null  (const [cryptoData, setCryptoData] = useState(null))
+    const [cryptoList, setCryptoList] = useState([])
 
     // 1. Define the reusable function
     // Notice we added '(coin)' so it can accept ANY coin name  const fetchData = async (coin) => {
@@ -25,9 +32,19 @@ function App() {
               console.error("Coin not found");
               return;
           }
-          setCryptoData(data);
+      // "prev" represents the current list.
+     // [...prev, data] means "Take the old list, and tack the new data on the end."
+          setCryptoList((prev) => {
+                // Simple check: filter out the new coin if it exists, then add the new version at the top
+                const newList = prev.filter(c => c.symbol !== data.symbol);
+                return [data, ...newList]
+          });
+
+          // 2. Set as Active Coin (For the main card)
+          setActiveCoin(data);
+
       } catch (error) {
-          console.error("Error fetching data:", error);
+          console.error("Error:", error);
       }
 
     };
@@ -76,29 +93,63 @@ function App() {
           </div>
         </div>
 
-        {/* --- RIGHT COLUMN (Card) --- */}
+
         <div className="hero-image">
-          {/* If cryptoData is NULL, show Loading. Otherwise show the Card. */}
-          {!cryptoData ? (
-            <div className="crypto-card">Loading...</div>
-          ) : (
-            <div className="crypto-card">
-              <div className="card-top">
-                <span className="card-title">{cryptoData.name}</span>
-                <span className="card-ticker">{cryptoData.symbol}</span>
-              </div>
-              <div className="card-price">${cryptoData.price.toLocaleString()}</div>
-              <div className="card-change" style={{ color: cryptoData.change >= 0 ? '#10b981' : '#ef4444' }}>
-                  {cryptoData.change > 0 ? '+' : ''}{cryptoData.change}%
-                  <span style={{ fontSize: '0.8rem', color: '#64748b', marginLeft: '5px' }}>
-                    (24h)
-                  </span>
-              </div>
+          {/* No if-statement needed anymore! */}
+          <div className="crypto-card">
+            <div className="card-top">
+              <span className="card-title">{activeCoin.name}</span>
+              <span className="card-ticker">{activeCoin.symbol}</span>
             </div>
-          )}
+            <div className="card-price">
+              ${activeCoin.price.toLocaleString()}
+            </div>
+            <div
+              className="card-change"
+              style={{ color: activeCoin.change >= 0 ? '#10b981' : '#ef4444' }}
+            >
+              {activeCoin.change > 0 ? '+' : ''}{activeCoin.change}%
+              <span style={{ fontSize: '0.8rem', color: '#64748b', marginLeft: '5px' }}>(24h)</span>
+            </div>
+          </div>
         </div>
 
       </main>
+
+      {/* 3. MARKET TABLE SECTION */}
+          <section className="market-section">
+            <h2 className="section-title">Market Watch</h2>
+            <div className="table-container">
+              <table className="crypto-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>24h Change</th>
+                    <th>Market Cap</th> {/* We don't have this yet, maybe hide it? */}
+                  </tr>
+                </thead>
+                <tbody>
+                  {cryptoList.map((coin) => (
+                    <tr key={coin.symbol}>
+                      <td className="coin-name">
+                        <span className="name">{coin.name}</span>
+                        <span className="ticker">{coin.symbol}</span>
+                      </td>
+                      <td className="coin-price">${coin.price.toLocaleString()}</td>
+                      <td
+                        className="coin-change"
+                        style={{ color: coin.change >= 0 ? '#10b981' : '#ef4444' }}
+                      >
+                        {coin.change > 0 ? '+' : ''}{coin.change}%
+                      </td>
+                      <td className="coin-mcap">N/A</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
 
     </div>
   )
